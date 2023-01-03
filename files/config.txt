@@ -1,0 +1,2 @@
+cursor_type=underline
+words_in_file=88
