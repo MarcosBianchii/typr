@@ -83,47 +83,56 @@ int validate_args(int argc, char **argv)
 
       if (argc >= 2)
       {
-            if (strcmp(argv[1], "--help") == 0)
-            {
-                  print_help();
-                  return 1;
-            }
-
-            else if (strcmp(argv[1], "--toggle-cursor") == 0)
-            {
-                  strcmp(config.cursor, "block") == 0 ?
-                  strcpy(config.cursor, "underline") :
-                  strcpy(config.cursor, "block");
-
-                  FILE *fp = fopen("files/config.txt", "w");
-                  if (!fp) return 1;
-
-                  fprintf(fp, "cursor_type=%s\n", config.cursor);
-                  fprintf(fp, "words_in_file=%i\n", config.words);
-                  fclose(fp);
-
-                  printf("\nCursor type changed to "CYAN"%s\n\n"WHITE, config.cursor);
-                  return 1;
-            }
-
-            else if (strcmp(argv[1], "--update-word-count") == 0)
-            {
-                  int words = count_words_file();
-                  
-                  FILE *fp = fopen("files/config.txt", "w");
-                  if (!fp)
+            if (strncmp(argv[1], "--", 2) == 0) {
+                  if (strcmp(argv[1], "--help") == 0)
                   {
-                        printf("\n"RED"Error: "WHITE"Couldn't open the config file\n\n");
+                        print_help();
                         return 1;
                   }
 
-                  fprintf(fp, "cursor_type=%s\n", config.cursor);
-                  fprintf(fp, "words_in_file=%i\n", words);
-                  fclose(fp);
+                  else if (strcmp(argv[1], "--toggle-cursor") == 0)
+                  {
+                        strcmp(config.cursor, "block") == 0 ?
+                        strcpy(config.cursor, "underline") :
+                        strcpy(config.cursor, "block");
 
-                  printf("\nWord count updated to "CYAN"%i\n\n"WHITE, words);
+                        FILE *fp = fopen("files/config.txt", "w");
+                        if (!fp) return 1;
 
-                  return 1;
+                        fprintf(fp, "cursor_type=%s\n", config.cursor);
+                        fprintf(fp, "words_in_file=%i\n", config.words);
+                        fclose(fp);
+
+                        printf("\nCursor type changed to "CYAN"%s\n\n"WHITE, config.cursor);
+                        return 1;
+                  }
+
+                  else if (strcmp(argv[1], "--update-word-count") == 0)
+                  {
+                        int words = count_words_file();
+                        
+                        FILE *fp = fopen("files/config.txt", "w");
+                        if (!fp)
+                        {
+                              printf("\n"RED"Error: "WHITE"Couldn't open the config file\n\n");
+                              return 1;
+                        }
+
+                        fprintf(fp, "cursor_type=%s\n", config.cursor);
+                        fprintf(fp, "words_in_file=%i\n", words);
+                        fclose(fp);
+
+                        printf("\nWord count updated to "CYAN"%i\n\n"WHITE, words);
+
+                        return 1;
+                  }
+
+                  else {
+                        printf("\n"RED"Error: "WHITE"Invalid command\n\n");
+                        printf("Type "CYAN"%s --help"WHITE" for a list of commands\n\n", argv[0]);
+                        return 1;
+                  }
+
             }
       }
 
